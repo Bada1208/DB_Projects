@@ -18,6 +18,9 @@ public class App {
                 // создание таблицы
                 statement.executeUpdate(createTable);
                 System.out.println("Table has been created");
+                int rows = statement.executeUpdate("INSERT products(ProductName, Price) VALUES ('iPhone X', 76000)," +
+                        "('Galaxy S9', 45000), ('Nokia 9', 36000)");
+                System.out.printf("Added %d rows", rows);
             }
         } catch (Exception e) {
             System.out.println("Connection failed...");
