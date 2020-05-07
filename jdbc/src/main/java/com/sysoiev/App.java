@@ -2,10 +2,7 @@ package com.sysoiev;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 public class App {
@@ -15,7 +12,9 @@ public class App {
         tableCreation();
         insertData();
         updateData();
-        deleteData();
+       // deleteData();
+        System.out.println();
+        selectData();
     }
 
     public static void tableCreation() {
@@ -76,6 +75,19 @@ public class App {
             Statement statement = connection.createStatement();
             int rows = statement.executeUpdate("DELETE FROM products WHERE Id = 3");
             System.out.printf("\n%d row(s) deleted", rows);
+        }
+    }
+
+    public static void selectData() throws IOException, SQLException {
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM products");
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                int price = resultSet.getInt(3);
+                System.out.printf("%d. %s - %d \n", id, name, price);
+            }
         }
     }
 }
