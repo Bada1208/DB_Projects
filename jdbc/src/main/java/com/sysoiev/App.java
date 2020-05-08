@@ -4,15 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class App {
+    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException, SQLException {
         dropTable();
         tableCreation();
-        insertData();
+        //insertData();
+        insertPreparedStatement();
         updateData();
-       // deleteData();
+        // deleteData();
         System.out.println();
         selectData();
     }
@@ -88,6 +91,21 @@ public class App {
                 int price = resultSet.getInt(3);
                 System.out.printf("%d. %s - %d \n", id, name, price);
             }
+        }
+    }
+
+    public static void insertPreparedStatement() throws IOException, SQLException {
+        System.out.println("Input product name: ");
+        String name = scanner.nextLine();
+        System.out.println("Input product price: ");
+        int price = scanner.nextInt();
+        try (Connection connection = getConnection()) {
+            String sql = "INSERT INTO Products (ProductName, Price) Values (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, price);
+            int rows = preparedStatement.executeUpdate();
+            System.out.printf("%d rows added", rows);
         }
     }
 }
