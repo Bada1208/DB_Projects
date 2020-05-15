@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class App {
-
+//todo: method search by id
     private Scanner scanner;
 
     public App() throws IOException, SQLException {

@@ -1,9 +1,7 @@
 package com.sysoiev.dao;
 
-import com.sysoiev.model.Student;
-
 import javax.sql.DataSource;
-import java.util.List;
+import java.io.IOException;
 
 public interface StudentDAO {
     /**
@@ -12,35 +10,42 @@ public interface StudentDAO {
      */
     void setDataSource(DataSource ds);
 
+    void dropTable();
+
+    void createTable();
+
     /**
      * This is the method to be used to create
      * a record in the Student table.
      */
-    void create(String name, Integer age);
+    void create() throws IOException;
 
     /**
      * This is the method to be used to list down
      * a record from the Student table corresponding
      * to a passed student id.
      */
-    Student getStudent(Integer id);
+    void getStudent() throws IOException;
 
     /**
      * This is the method to be used to list down
      * all the records from the Student table.
      */
-    List<Student> listStudents();
+    void listStudents();
 
     /**
      * This is the method to be used to delete
      * a record from the Student table corresponding
      * to a passed student id.
      */
-    void delete(Integer id);
+    void delete() throws IOException;
 
     /**
-     * This is the method to be used to update
+     * There are methods to be used to update
      * a record into the Student table.
      */
-    void update(Integer id, Integer age);
+    void updateAge() throws IOException;
+
+    void updateName() throws IOException;
+
 }

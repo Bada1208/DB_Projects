@@ -1,9 +1,10 @@
 package com.sysoiev.model;
 
 public class Student {
-    private Integer age;
-    private String name;
+
     private Integer id;
+    private String name;
+    private Integer age;
 
     public Integer getAge() {
         return age;
@@ -28,4 +29,10 @@ public class Student {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Student : " + "id=" + id + ", name='" + name + ", age=" + age;
+    }
+
 }
