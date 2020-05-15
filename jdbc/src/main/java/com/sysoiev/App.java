@@ -7,20 +7,11 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class App {
-    private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException, SQLException {
+    private Scanner scanner;
+
+    public App() throws IOException, SQLException {
         dropTable();
-        tableCreation();
-        //insertData();
-        insertPreparedStatement();
-        updateData();
-        // deleteData();
-        System.out.println();
-        selectData();
-    }
-
-    public static void tableCreation() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             String createTable = "CREATE TABLE IF NOT EXISTS products (Id INT PRIMARY KEY AUTO_INCREMENT, ProductName VARCHAR(20), Price INT)";
@@ -37,7 +28,47 @@ public class App {
         }
     }
 
-    public static Connection getConnection() throws IOException, SQLException {
+    public void run() throws IOException, SQLException {
+        boolean go = true;
+        while (go) {
+            scanner = new Scanner(System.in);
+            System.out.println("\nChoose option, please :");
+            System.out.println("Enter number : ");
+            System.out.println("1. Insert rows ");
+            System.out.println("2. Update row ");
+            System.out.println("3. Delete row ");
+            System.out.println("4. Show all rows ");
+            System.out.println("5. End ");
+            int number = scanner.nextInt();
+            switch (number) {
+                case 1:
+                    insertPreparedStatement();
+                    break;
+                case 2:
+                    updateData();
+                    break;
+                case 3:
+                    deleteData();
+                    break;
+                case 4:
+                    selectData();
+                    break;
+                case 5:
+                    go = false;
+                    break;
+                default:
+                    System.out.println("Wrong number");
+                    System.out.println("Enter number from 1 to 5, please");
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException, SQLException {
+        App app = new App();
+        app.run();
+    }
+
+    public Connection getConnection() throws IOException, SQLException {
 
         Properties properties = new Properties();
         try (InputStream inputStream = App.class.getResourceAsStream("/database.properties")) {
@@ -49,7 +80,7 @@ public class App {
         return DriverManager.getConnection(url, username, password);
     }
 
-    public static void insertData() throws SQLException, IOException {
+    public void insertData() throws SQLException, IOException {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             int rows = statement.executeUpdate("INSERT products(ProductName, Price) VALUES ('iPhone X', 76000)," +
@@ -58,30 +89,43 @@ public class App {
         }
     }
 
-    public static void dropTable() throws IOException, SQLException {
+    public void dropTable() throws IOException, SQLException {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE products");
         }
     }
 
-    public static void updateData() throws IOException, SQLException {
+    public void updateData() throws IOException, SQLException {
+        scanner = new Scanner(System.in);
+        System.out.println("enter new product name : ");
+        String newName = scanner.nextLine();
+        System.out.println("enter new product price : ");
+        int price = scanner.nextInt();
+        System.out.println("enter product id : ");
+        int id = scanner.nextInt();
         try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
-            int rows = statement.executeUpdate("UPDATE products SET Price = Price - 5000");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE products SET ProductName=?,Price = ?   WHERE Id = " + id);
+            preparedStatement.setString(1, newName);
+            preparedStatement.setInt(2, price);
+            int rows = preparedStatement.executeUpdate();
             System.out.printf("\nUpdated %d rows", rows);
         }
     }
 
-    public static void deleteData() throws IOException, SQLException {
+    public void deleteData() throws IOException, SQLException {
+        scanner = new Scanner(System.in);
+        System.out.println("input product name : ");
+        String name = scanner.nextLine();
         try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
-            int rows = statement.executeUpdate("DELETE FROM products WHERE Id = 3");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM products WHERE ProductName = ?");
+            preparedStatement.setString(1, name);
+            int rows = preparedStatement.executeUpdate();
             System.out.printf("\n%d row(s) deleted", rows);
         }
     }
 
-    public static void selectData() throws IOException, SQLException {
+    public void selectData() throws IOException, SQLException {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM products");
@@ -94,13 +138,14 @@ public class App {
         }
     }
 
-    public static void insertPreparedStatement() throws IOException, SQLException {
+    public void insertPreparedStatement() throws IOException, SQLException {
+        scanner = new Scanner(System.in);
         System.out.println("Input product name: ");
         String name = scanner.nextLine();
         System.out.println("Input product price: ");
         int price = scanner.nextInt();
         try (Connection connection = getConnection()) {
-            String sql = "INSERT INTO Products (ProductName, Price) Values (?, ?)";
+            String sql = "INSERT INTO products (ProductName, Price) Values (?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             preparedStatement.setInt(2, price);
