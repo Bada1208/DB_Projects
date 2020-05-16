@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="jdbc" />
         <module name="spring_jdbc" />
+        <module name="hiber" />
       </profile>
     </annotationProcessing>
   </component>

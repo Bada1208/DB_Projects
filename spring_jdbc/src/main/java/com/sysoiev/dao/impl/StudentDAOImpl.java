@@ -21,7 +21,6 @@ public class StudentDAOImpl implements StudentDAO {
         this.dataSource = ds;
         this.jdbcTemplate = new JdbcTemplate(ds);
     }
-//CREATE TABLE IF NOT EXISTS products (Id INT PRIMARY KEY AUTO_INCREMENT, ProductName VARCHAR(20), Price INT)
     @Override
     public void createTable() {
         String SQL = "CREATE TABLE IF NOT EXISTS Student(ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, NAME VARCHAR(20), AGE INT);";

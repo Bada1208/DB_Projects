@@ -11,6 +11,7 @@
     <modules>
         <module>jdbc</module>
         <module>spring_jdbc</module>
+        <module>hiber</module>
     </modules>
 
 
