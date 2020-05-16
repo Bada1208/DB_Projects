@@ -10,22 +10,21 @@ public class App {
     //todo result if search not successfull
     private Scanner scanner;
 
-    public App() throws IOException, SQLException {
-        dropTable();
+    public App() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-            String createTable = "CREATE TABLE IF NOT EXISTS products (Id INT PRIMARY KEY AUTO_INCREMENT, ProductName VARCHAR(20), Price INT)";
+            /*String createTable = "CREATE TABLE IF NOT EXISTS products (Id INT PRIMARY KEY AUTO_INCREMENT, ProductName VARCHAR(20), Price INT)";
             try (Connection connection = getConnection()) {
                 Statement statement = connection.createStatement();
                 // создание таблицы
                 statement.executeUpdate(createTable);
-                System.out.println("Table has been created");
-            }
+                System.out.println("Table has been created");}*/
+
         } catch (Exception e) {
             System.out.println("Connection failed...");
-
             System.out.println(e);
         }
+
     }
 
     public void run() throws IOException, SQLException {
@@ -40,7 +39,9 @@ public class App {
             System.out.println("4. Show all rows ");
             System.out.println("5. Search by id ");
             System.out.println("6. Search by name ");
-            System.out.println("7. End ");
+            System.out.println("7. Drop table ");
+            System.out.println("8. Create table ");
+            System.out.println("9. End ");
             int number = scanner.nextInt();
             switch (number) {
                 case 1:
@@ -62,11 +63,17 @@ public class App {
                     searchByName();
                     break;
                 case 7:
+                    dropTable();
+                    break;
+                case 8:
+                    tableCreation();
+                    break;
+                case 9:
                     go = false;
                     break;
                 default:
                     System.out.println("Wrong number");
-                    System.out.println("Enter number from 1 to 5, please");
+                    System.out.println("Enter number from 1 to 8, please");
             }
         }
     }
@@ -74,6 +81,16 @@ public class App {
     public static void main(String[] args) throws IOException, SQLException {
         App app = new App();
         app.run();
+    }
+
+    public void tableCreation() throws IOException, SQLException {
+        String createTable = "CREATE TABLE IF NOT EXISTS products (Id INT PRIMARY KEY AUTO_INCREMENT, ProductName VARCHAR(20), Price INT)";
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            // создание таблицы
+            statement.executeUpdate(createTable);
+            System.out.println("Table has been created");
+        }
     }
 
     public Connection getConnection() throws IOException, SQLException {
@@ -101,6 +118,7 @@ public class App {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE products");
+            System.out.println("Table has been deleted ");
         }
     }
 
