@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class App {
-//todo: method search by id
+    //todo result if search not successfull
     private Scanner scanner;
 
     public App() throws IOException, SQLException {
@@ -29,16 +29,18 @@ public class App {
     }
 
     public void run() throws IOException, SQLException {
+        scanner = new Scanner(System.in);
         boolean go = true;
         while (go) {
-            scanner = new Scanner(System.in);
             System.out.println("\nChoose option, please :");
             System.out.println("Enter number : ");
             System.out.println("1. Insert rows ");
             System.out.println("2. Update row ");
             System.out.println("3. Delete row ");
             System.out.println("4. Show all rows ");
-            System.out.println("5. End ");
+            System.out.println("5. Search by id ");
+            System.out.println("6. Search by name ");
+            System.out.println("7. End ");
             int number = scanner.nextInt();
             switch (number) {
                 case 1:
@@ -54,6 +56,12 @@ public class App {
                     selectData();
                     break;
                 case 5:
+                    searchById();
+                    break;
+                case 6:
+                    searchByName();
+                    break;
+                case 7:
                     go = false;
                     break;
                 default:
@@ -151,6 +159,40 @@ public class App {
             preparedStatement.setInt(2, price);
             int rows = preparedStatement.executeUpdate();
             System.out.printf("%d rows added", rows);
+        }
+    }
+
+    public void searchById() throws IOException, SQLException {
+        scanner = new Scanner(System.in);
+        System.out.println("Input id of product :");
+        int idProduct = scanner.nextInt();
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM products WHERE Id=?");
+            preparedStatement.setInt(1, idProduct);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                int price = resultSet.getInt(3);
+                System.out.printf("%d. %s - %d \n", id, name, price);
+            }
+        }
+    }
+
+    public void searchByName() throws IOException, SQLException {
+        scanner = new Scanner(System.in);
+        System.out.println("Input name of product :");
+        String nameProduct = scanner.nextLine();
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM products WHERE ProductName=?");
+            preparedStatement.setString(1, nameProduct);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                int price = resultSet.getInt(3);
+                System.out.printf("%d. %s - %d \n", id, name, price);
+            }
         }
     }
 }
