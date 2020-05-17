@@ -62,7 +62,7 @@ public class App {
                         break;
                     default:
                         System.out.println("Wrong number");
-                        System.out.println("Enter number from 1 to 7, please");
+                        System.out.println("Enter number from 1 to 9, please");
                 }
             }
         } catch (IOException e) {
