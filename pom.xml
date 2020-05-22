@@ -12,6 +12,9 @@
         <module>jdbc</module>
         <module>spring_jdbc</module>
         <module>hiber</module>
+        <module>web_jdbc</module>
+        <module>web_spring_jdbc</module>
+        <module>web_hibernate</module>
     </modules>
 
 

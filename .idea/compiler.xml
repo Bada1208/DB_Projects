@@ -6,9 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="web_spring_jdbc" />
+        <module name="hiber" />
+        <module name="web_jdbc" />
+        <module name="web_hibernate" />
         <module name="jdbc" />
         <module name="spring_jdbc" />
-        <module name="hiber" />
       </profile>
     </annotationProcessing>
   </component>
